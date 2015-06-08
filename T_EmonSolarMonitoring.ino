@@ -87,11 +87,10 @@ int avgVal = 0;
 float pinVoltage = 0;
 
 float batteryVoltage = 0;
-float batteryVoltageAlternate = 0;//for testing
 float panelVoltage = 0;
 
-
-
+float batteryVoltageAlternate = 0;//for testing
+float panelVoltageAlternate = 0;//for testing
 
 
 int sensorValue = 0;        // value read from the carrier board
@@ -175,8 +174,8 @@ void loop()
   avgVal = sampleVal / 10;
 
   pinVoltage = avgVal * supplyV/1023; 
-  panelVoltage = (pinVoltage*panelHelperRRatio - panR1*supplyV)/panR2;
-
+  panelVoltage = batteryVoltage - (pinVoltage*panelHelperRRatio - panR1*supplyV)/panR2;
+  panelVoltageAlternate = batteryVoltageAlternate - (pinVoltage*panelHelperRRatio - panR1*supplyV)/panR2;//for testing
 
 
 //solar amperage measurement       
@@ -199,14 +198,16 @@ void loop()
   emontx.solarPanelV = panelVoltage*100;
   
 //serial
-  Serial.print("Battery voltage: " );                 
+  Serial.print("Battery voltage:  " );                 
   Serial.print(batteryVoltage); 
-  Serial.print("Battery voltage alternate: " );                 
-  Serial.print(batteryVoltageAlternate); 
-  Serial.print("  Panel voltage:"); 
+  Serial.print("  Panel voltage: "); 
   Serial.print(panelVoltage);
-  Serial.print("  Amps:"); 
+  Serial.print("  Amps: "); 
   Serial.println(amps);
+  Serial.print("Battery v altern: " );                 
+  Serial.print(batteryVoltageAlternate); 
+  Serial.print("  Panel v alter: "); 
+  Serial.println(panelVoltageAlternate);
   
   
   
@@ -258,8 +259,9 @@ void loop()
 
 
 
-long readVcc() {
-  //from http://provideyourown.com/2012/secret-arduino-voltmeter-measure-battery-voltage/
+//Precise Vcc value for better analogRead interpretation
+//from http://provideyourown.com/2012/secret-arduino-voltmeter-measure-battery-voltage/
+long readVcc() { 
   // Read 1.1V reference against AVcc
   // set the reference to Vcc and the measurement to the internal 1.1V reference
   #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
