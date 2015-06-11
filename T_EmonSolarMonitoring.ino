@@ -70,9 +70,9 @@ equation: batteryVoltage = pinVoltage*batR2/(batR1+batR2); ??
 
 
 //panel voltage divider
-int panR1 = 1700;
-int panR2 = 1300;
-int panR3 = 1000;
+int panR1 = 3603;
+int panR2 = 2447;
+int panR3 = 1980;
 /* The equation is panelVoltage = (pinVoltage*(panR2+panR1+panR1*panR2/panR3) - panR1*supplyV)/panR2 */
 float panelHelperRRatio = (float)panR2 + (float)panR1 + (float)panR1*(float)panR2/(float)panR3;
 /* Now simplified equation to be used: panelVoltage = (pinVoltage*panelHelperRRatio - panR1*supplyV)/panR2 */
